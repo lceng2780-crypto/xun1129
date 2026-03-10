@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>氣泡排序演示程式 - 城市自動排序</title>
+    <title>氣泡排序法 - 程式與原理</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,306 +12,472 @@
             margin: 0;
             padding: 20px;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
+            margin: 0 auto;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             padding: 40px;
-            margin: 20px;
-            backdrop-filter: blur(10px);
         }
         h1 {
-            color: #4a5568;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        .principle {
-            background-color: #e2e8f0;
-            border-left: 5px solid #3182ce;
-            padding: 20px;
-            margin-bottom: 40px;
-            border-radius: 8px;
-        }
-        .principle h2 {
             color: #2d3748;
-            margin-top: 0;
-        }
-        .principle p {
-            line-height: 1.6;
+            font-size: 2.5em;
             margin-bottom: 10px;
         }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background-color: #f7fafc;
+            border-radius: 8px;
+            border-left: 5px solid #3182ce;
+        }
+        h2 {
+            color: #2d3748;
+            border-bottom: 2px solid #3182ce;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .principle-text {
+            line-height: 1.8;
+            font-size: 1.05em;
+            margin: 15px 0;
+        }
         .code-block {
-            background-color: #2d3748;
-            color: #48bb78;
+            background-color: #1a202c;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin: 15px 0;
+            border: 1px solid #2d3748;
+        }
+        .c-code {
+            background-color: #1a202c;
+            color: #ffd700;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin: 15px 0;
+            border: 1px solid #2d3748;
+        }
+        .step {
+            background-color: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .step-number {
+            display: inline-block;
+            background-color: #48bb78;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .example {
+            background-color: #edf2f7;
             padding: 15px;
             border-radius: 8px;
-            margin-top: 10px;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
-            font-size: 0.9em;
+            margin: 15px 0;
+            border: 1px dashed #3182ce;
         }
-        .controls {
-            text-align: center;
-            margin-bottom: 30px;
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: white;
         }
-        button {
-            background-color: #3182ce;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            margin: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s, transform 0.2s;
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
         }
-        button:hover {
-            background-color: #2c5aa0;
-            transform: scale(1.05);
-        }
-        button:disabled {
-            background-color: #cbd5e0;
-            cursor: not-allowed;
-            transform: scale(1);
-        }
-        .speed-control {
-            margin-top: 15px;
-        }
-        .visualization {
-            background-color: #f7fafc;
-            padding: 30px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border: 2px solid #e2e8f0;
-        }
-        .city-bars {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 15px;
-            height: 350px;
-            margin-bottom: 20px;
-        }
-        .city-bar {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        .bar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 8px 8px 0 0;
-            width: 80px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.8em;
-            padding-top: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        .bar.comparing {
-            background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
-            box-shadow: 0 0 15px rgba(245, 101, 101, 0.6);
-            transform: scale(1.1);
-        }
-        .bar.swapping {
-            background: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%);
-            box-shadow: 0 0 15px rgba(246, 173, 85, 0.6);
-        }
-        .bar.sorted {
-            background: linear-gradient(135deg, #9ae6b4 0%, #68d391 100%);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .city-name {
-            margin-top: 10px;
+        .comparison-table th {
+            background-color: #edf2f7;
             font-weight: bold;
             color: #2d3748;
+        }
+        .complexity-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .complexity-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-top: 3px solid #3182ce;
+            text-align: center;
+        }
+        .complexity-label {
+            font-weight: bold;
+            color: #4a5568;
             font-size: 0.9em;
         }
-        .info {
-            text-align: center;
-            color: #4a5568;
+        .complexity-value {
+            color: #3182ce;
+            font-size: 1.5em;
             font-weight: bold;
-            margin-top: 20px;
+            margin-top: 5px;
+        }
+        .visualization-step {
+            background-color: white;
             padding: 15px;
-            background-color: #e2e8f0;
+            margin: 15px 0;
             border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        .highlight {
+            background-color: #ffd700;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .swap-arrow {
+            color: #f56565;
+            font-weight: bold;
+        }
+        .advantages, .disadvantages {
+            margin: 15px 0;
+        }
+        .advantages li, .disadvantages li {
+            margin: 8px 0;
         }
         @media (max-width: 768px) {
+            .complexity-box {
+                grid-template-columns: 1fr;
+            }
             h1 {
-                font-size: 2em;
-            }
-            .city-bars {
-                height: 250px;
-            }
-            .bar {
-                width: 60px;
-                font-size: 0.7em;
+                font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎯 氣泡排序演示程式</h1>
+        <h1>🔄 氣泡排序法完整教學</h1>
+        <p class="subtitle">程式碼、原理與運作演示</p>
 
-        <div class="principle">
-            <h2>氣泡排序法原理</h2>
-            <p><strong>氣泡排序法（Bubble Sort）</strong>是一種簡單的排序演算法。它重複地走訪要排序的數列，一次比較兩個相鄰的元素，如果他們的順序錯誤就把他們交換過來。</p>
-            <p>走訪數列的工作是重複地進行直到沒有再需要交換，也就是說該數列已經排序完成。</p>
+        <!-- 基本概念 -->
+        <section>
+            <h2>📌 基本概念</h2>
+            <p class="principle-text">
+                <strong>氣泡排序法（Bubble Sort）</strong>是一種簡單的排序演算法，它通過重複走訪要排序的數列，比較相鄰的兩個元素，如果順序不對就交換它們。隨著演算法的進行，最大的元素會逐漸「浮」到數列的末端，就像水中的氣泡一樣上升到水面。
+            </p>
+            <p class="principle-text">
+                這個演算法最適合用在教學和理解排序概念上，因為它直觀易懂，但在實際應用中性能不如其他排序演算法。
+            </p>
+        </section>
+
+        <!-- 運作原理 -->
+        <section>
+            <h2>⚙️ 詳細運作原理</h2>
+            
+            <h3 style="color: #2d3748; margin-top: 20px;">演算法步驟：</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>外層迴圈：</strong>走訪整個數列 n-1 次（n 是數列長度）
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>內層迴圈：</strong>在每次外層迴圈中，比較相鄰的元素對
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>比較與交換：</strong>如果前一個元素大於後一個元素，就交換它們
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>持續重複：</strong>持續進行直到整個數列排序完成（沒有再需要交換）
+            </div>
+
+            <h3 style="color: #2d3748; margin-top: 20px;">虛擬程式碼：</h3>
             <div class="code-block">
-// 虛擬程式碼<br>
-for i = 0 to n-1 do<br>
-&nbsp;&nbsp;for j = 0 to n-i-1 do<br>
-&nbsp;&nbsp;&nbsp;&nbsp;if arr[j] > arr[j+1] then<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swap(arr[j], arr[j+1])<br>
-&nbsp;&nbsp;&nbsp;&nbsp;end if<br>
-&nbsp;&nbsp;end for<br>
-end for<br>
+procedure bubbleSort(list : array of items)
+    n = length(list)
+    for i = 0 to n-1 do
+        for j = 0 to n-i-1 do
+            if list[j] > list[j+1] then
+                swap(list[j], list[j+1])
+            end if
+        end for
+    end for
+end procedure
             </div>
-            <p><strong>時間複雜度：</strong> O(n²) | <strong>空間複雜度：</strong> O(1)</p>
-        </div>
+        </section>
 
-        <div class="controls">
-            <button onclick="startSort()">開始排序</button>
-            <button onclick="resetSort()">重置</button>
-            <div class="speed-control">
-                <label>排序速度：</label>
-                <input type="range" id="speedSlider" min="10" max="1000" value="300" style="width: 200px;">
-                <span id="speedDisplay">中速</span>
+        <!-- 具體例子 -->
+        <section>
+            <h2>📊 具體例子 - 排序 [5, 2, 8, 1, 9]</h2>
+            
+            <div class="visualization-step">
+                <strong>初始陣列：</strong> [5, 2, 8, 1, 9]
             </div>
-        </div>
 
-        <div class="visualization">
-            <div class="city-bars" id="cityBars"></div>
-            <div class="info">
-                <div id="stepInfo">準備就緒，點擊「開始排序」開始演示</div>
+            <h3 style="color: #2d3748;">第 1 輪：</h3>
+            <div class="visualization-step">
+                比較 5 和 2 → <span class="swap-arrow">交換</span> → [2, 5, 8, 1, 9]<br>
+                比較 5 和 8 → 無需交換 → [2, 5, 8, 1, 9]<br>
+                比較 8 和 1 → <span class="swap-arrow">交換</span> → [2, 5, 1, 8, 9]<br>
+                比較 8 和 9 → 無需交換 → [2, 5, 1, 8, <span class="highlight">9</span>]<br>
+                <span class="highlight">9 已在正確位置</span>
             </div>
-        </div>
+
+            <h3 style="color: #2d3748;">第 2 輪：</h3>
+            <div class="visualization-step">
+                比較 2 和 5 → 無需交換 → [2, 5, 1, 8, 9]<br>
+                比較 5 和 1 → <span class="swap-arrow">交換</span> → [2, 1, 5, 8, 9]<br>
+                比較 5 和 8 → 無需交換 → [2, 1, 5, <span class="highlight">8, 9</span>]<br>
+                <span class="highlight">8, 9 已在正確位置</span>
+            </div>
+
+            <h3 style="color: #2d3748;">第 3 輪：</h3>
+            <div class="visualization-step">
+                比較 2 和 1 → <span class="swap-arrow">交換</span> → [1, 2, 5, 8, 9]<br>
+                比較 2 和 5 → 無需交換 → [1, <span class="highlight">2, 5, 8, 9</span>]<br>
+                <span class="highlight">2, 5, 8, 9 已在正確位置</span>
+            </div>
+
+            <h3 style="color: #2d3748;">第 4 輪：</h3>
+            <div class="visualization-step">
+                數列已排序完成：[<span class="highlight">1, 2, 5, 8, 9</span>]
+            </div>
+        </section>
+
+        <!-- C語言程式碼 -->
+        <section>
+            <h2>💻 C語言完整程式碼</h2>
+            
+            <div class="c-code">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+// 氣泡排序函數，用於排序字串陣列
+void bubbleSort(char arr[][50], int n) {
+    int i, j;
+    char temp[50];
+    
+    // 外層迴圈：走訪 n-1 次
+    for (i = 0; i &lt; n-1; i++) {
+        // 內層迴圈：比較相鄰元素
+        for (j = 0; j &lt; n-i-1; j++) {
+            // 如果前一個元素大於後一個，就交換
+            if (strcmp(arr[j], arr[j+1]) &gt; 0) {
+                // 複製第 j 個元素到暫存
+                strcpy(temp, arr[j]);
+                // 複製第 j+1 個元素到第 j 個
+                strcpy(arr[j], arr[j+1]);
+                // 複製暫存到第 j+1 個
+                strcpy(arr[j+1], temp);
+            }
+        }
+    }
+}
+
+// 主程式
+int main() {
+    // 定義城市陣列
+    char cities[][50] = {"Taipei", "Kaohsiung", "Taichung", "Tainan", "Hsinchu"};
+    int n = sizeof(cities)/sizeof(cities[0]);
+    
+    // 顯示原始陣列
+    printf("原始城市列表: ");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%s ", cities[i]);
+    }
+    printf("\n\n");
+
+    // 執行氣泡排序
+    bubbleSort(cities, n);
+
+    // 顯示排序後的陣列
+    printf("排序後的城市列表: ");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%s ", cities[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+            </div>
+
+            <div class="example">
+                <strong>程式輸出：</strong><br>
+                原始城市列表: Taipei Kaohsiung Taichung Tainan Hsinchu<br><br>
+                排序後的城市列表: Hsinchu Kaohsiung Taichung Tainan Taipei
+            </div>
+        </section>
+
+        <!-- 時間複雜度分析 -->
+        <section>
+            <h2>📈 效能分析</h2>
+            
+            <div class="complexity-box">
+                <div class="complexity-item">
+                    <div class="complexity-label">最佳情況</div>
+                    <div class="complexity-value">O(n)</div>
+                    <p style="font-size: 0.85em; color: #718096; margin: 5px 0 0 0;">陣列已排序</p>
+                </div>
+                <div class="complexity-item">
+                    <div class="complexity-label">平均情況</div>
+                    <div class="complexity-value">O(n²)</div>
+                    <p style="font-size: 0.85em; color: #718096; margin: 5px 0 0 0;">隨機排列</p>
+                </div>
+                <div class="complexity-item">
+                    <div class="complexity-label">最壞情況</div>
+                    <div class="complexity-value">O(n²)</div>
+                    <p style="font-size: 0.85em; color: #718096; margin: 5px 0 0 0;">逆序排列</p>
+                </div>
+            </div>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>複雜度分類</th>
+                    <th>說明</th>
+                </tr>
+                <tr>
+                    <td><strong>時間複雜度</strong></td>
+                    <td>O(n²) - 需要 n-1 次外層迴圈，每次內層迴圈最多執行 n-i-1 次，總共約 n×n/2 = n²/2 ≈ O(n²)</td>
+                </tr>
+                <tr>
+                    <td><strong>空間複雜度</strong></td>
+                    <td>O(1) - 只使用常數個額外變數（如 temp, i, j），不需要額外的陣列</td>
+                </tr>
+                <tr>
+                    <td><strong>穩定性</strong></td>
+                    <td>✓ 穩定排序 - 相同元素的相對順序不會改變</td>
+                </tr>
+                <tr>
+                    <td><strong>排序方式</strong></td>
+                    <td>○ 原地排序 - 不需要額外的記憶體空間</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- 優缺點 -->
+        <section>
+            <h2>✅ 優缺點分析</h2>
+            
+            <h3 style="color: #48bb78;">✓ 優點：</h3>
+            <ul class="advantages">
+                <li><strong>簡單易懂：</strong>演算法邏輯直觀，新手容易理解</li>
+                <li><strong>原地排序：</strong>只需要常數級別的額外空間 O(1)</li>
+                <li><strong>穩定排序：</strong>相同值的元素相對順序不變</li>
+                <li><strong>自適應：</strong>已排序的陣列時間複雜度為 O(n)</li>
+                <li><strong>易於實現：</strong>程式碼簡潔，容易除錯</li>
+            </ul>
+
+            <h3 style="color: #f56565;">✗ 缺點：</h3>
+            <ul class="disadvantages">
+                <li><strong>效率低：</strong>平均時間複雜度為 O(n²)，不適合大型資料集</li>
+                <li><strong>比較次數多：</strong>即使資料已排序，仍需進行多次比較</li>
+                <li><strong>交換次數多：</strong>會進行大量數據移動操作</li>
+                <li><strong>不適合實務應用：</strong>當數據量大時，效能顯著下降</li>
+            </ul>
+        </section>
+
+        <!-- 應用場景 -->
+        <section>
+            <h2>🎯 應用場景</h2>
+            <ul>
+                <li><strong>教育用途：</strong>學習排序演算法的基礎概念</li>
+                <li><strong>小規模資料：</strong>當資料量很小（< 100 元素）時</li>
+                <li><strong>幾乎已排序：</strong>當資料已大致排序時</li>
+                <li><strong>演算法理解：</strong>理解時間複雜度和交換算法的概念</li>
+                <li><strong>簡單實現：</strong>當簡單易懂比效率更重要時</li>
+            </ul>
+        </section>
+
+        <!-- 與其他排序算法的比較 -->
+        <section>
+            <h2>🔀 與其他排序算法的比較</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>演算法</th>
+                    <th>時間複雜度<br>(平均)</th>
+                    <th>空間複雜度</th>
+                    <th>穩定性</th>
+                    <th>應用</th>
+                </tr>
+                <tr>
+                    <td>氣泡排序</td>
+                    <td>O(n²)</td>
+                    <td>O(1)</td>
+                    <td>✓ 穩定</td>
+                    <td>教育用途</td>
+                </tr>
+                <tr>
+                    <td>選擇排序</td>
+                    <td>O(n²)</td>
+                    <td>O(1)</td>
+                    <td>✗ 不穩定</td>
+                    <td>簡單場景</td>
+                </tr>
+                <tr>
+                    <td>插入排序</td>
+                    <td>O(n²)</td>
+                    <td>O(1)</td>
+                    <td>✓ 穩定</td>
+                    <td>小規模資料</td>
+                </tr>
+                <tr>
+                    <td>快速排序</td>
+                    <td>O(n log n)</td>
+                    <td>O(log n)</td>
+                    <td>✗ 不穩定</td>
+                    <td>一般應用</td>
+                </tr>
+                <tr>
+                    <td>歸併排序</td>
+                    <td>O(n log n)</td>
+                    <td>O(n)</td>
+                    <td>✓ 穩定</td>
+                    <td>大型資料集</td>
+                </tr>
+                <tr>
+                    <td>堆本排序</td>
+                    <td>O(n log n)</td>
+                    <td>O(1)</td>
+                    <td>✗ 不穩定</td>
+                    <td>需要保證效率</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- 結論 -->
+        <section style="background-color: #edf2f7; border-left-color: #48bb78;">
+            <h2 style="color: #22543d;">📝 總結</h2>
+            <p class="principle-text">
+                氣泡排序法是學習排序演算法時的良好起點，它清楚地演示了排序的基本概念。雖然在實務應用中因為效率問題而較少使用，但它對於理解演算法設計和複雜度分析仍然非常有價值。
+            </p>
+            <p class="principle-text">
+                當您需要排序小規模資料或進行教學演示時，氣泡排序法是一個簡單且實用的選擇。但對於生產環境或大型資料集，應該選擇效率更高的演算法如快速排序或歸併排序。
+            </p>
+        </section>
     </div>
-
-    <script>
-        const cities = ['Taipei', 'Kaohsiung', 'Taichung', 'Tainan', 'Hsinchu'];
-        let currentArray = [...cities];
-        let isSorting = false;
-
-        const maxLength = Math.max(...cities.map(c => c.length)) * 25;
-
-        function initVisualization() {
-            const container = document.getElementById('cityBars');
-            container.innerHTML = '';
-            
-            currentArray.forEach((city, index) => {
-                const barHeight = (city.charCodeAt(0) % 26 + 10) * 15;
-                const cityBar = document.createElement('div');
-                cityBar.className = 'city-bar';
-                cityBar.id = `bar-${index}`;
-                
-                const bar = document.createElement('div');
-                bar.className = 'bar';
-                bar.style.height = barHeight + 'px';
-                bar.textContent = city.charAt(0).toUpperCase();
-                
-                const name = document.createElement('div');
-                name.className = 'city-name';
-                name.textContent = city;
-                
-                cityBar.appendChild(bar);
-                cityBar.appendChild(name);
-                container.appendChild(cityBar);
-            });
-        }
-
-        function resetSort() {
-            currentArray = [...cities];
-            isSorting = false;
-            initVisualization();
-            document.getElementById('stepInfo').textContent = '準備就緒，點擊「開始排序」開始演示';
-        }
-
-        async function startSort() {
-            if (isSorting) return;
-            isSorting = true;
-            
-            const n = currentArray.length;
-            const speed = 1000 - document.getElementById('speedSlider').value;
-            
-            for (let i = 0; i < n - 1; i++) {
-                for (let j = 0; j < n - i - 1; j++) {
-                    const bar1 = document.getElementById(`bar-${j}`).querySelector('.bar');
-                    const bar2 = document.getElementById(`bar-${j+1}`).querySelector('.bar');
-                    
-                    bar1.classList.add('comparing');
-                    bar2.classList.add('comparing');
-                    
-                    document.getElementById('stepInfo').textContent = 
-                        `正在比較: ${currentArray[j]} 與 ${currentArray[j+1]} (第 ${i+1} 輪)`;
-                    
-                    await new Promise(resolve => setTimeout(resolve, speed));
-                    
-                    if (currentArray[j] > currentArray[j+1]) {
-                        bar1.classList.remove('comparing');
-                        bar2.classList.remove('comparing');
-                        bar1.classList.add('swapping');
-                        bar2.classList.add('swapping');
-                        
-                        document.getElementById('stepInfo').textContent = 
-                            `交換: ${currentArray[j]} ⇄ ${currentArray[j+1]}`;
-                        
-                        await new Promise(resolve => setTimeout(resolve, speed * 1.5));
-                        
-                        [currentArray[j], currentArray[j+1]] = [currentArray[j+1], currentArray[j]];
-                        
-                        const temp = document.getElementById(`bar-${j}`);
-                        const next = document.getElementById(`bar-${j+1}`);
-                        temp.parentNode.insertBefore(next, temp);
-                        
-                        document.getElementById(`bar-${j}`).id = `bar-temp`;
-                        document.getElementById(`bar-${j+1}`).id = `bar-${j}`;
-                        document.getElementById('bar-temp').id = `bar-${j+1}`;
-                        
-                        document.getElementById(`bar-${j}`).querySelector('.bar').classList.remove('swapping');
-                        document.getElementById(`bar-${j+1}`).querySelector('.bar').classList.remove('swapping');
-                    } else {
-                        bar1.classList.remove('comparing');
-                        bar2.classList.remove('comparing');
-                    }
-                    
-                    await new Promise(resolve => setTimeout(resolve, speed * 0.5));
-                }
-                
-                for (let k = n - i - 1; k < n; k++) {
-                    document.getElementById(`bar-${k}`).querySelector('.bar').classList.add('sorted');
-                }
-            }
-            
-            document.getElementById(`bar-0`).querySelector('.bar').classList.add('sorted');
-            document.getElementById('stepInfo').textContent = '✅ 排序完成！所有城市已按字母順序排列';
-            isSorting = false;
-        }
-
-        document.getElementById('speedSlider').addEventListener('change', function() {
-            const speed = parseInt(this.value);
-            if (speed < 300) {
-                document.getElementById('speedDisplay').textContent = '快速';
-            } else if (speed < 600) {
-                document.getElementById('speedDisplay').textContent = '中速';
-            } else {
-                document.getElementById('speedDisplay').textContent = '慢速';
-            }
-        });
-
-        initVisualization();
-    </script>
 </body>
 </html>
