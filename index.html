@@ -3,48 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>城市排序列表</title>
+    <title>城市排序列表 - 氣泡排序法</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
-            text-align: center;
-            padding: 50px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 1200px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            margin: 20px;
+            backdrop-filter: blur(10px);
         }
         h1 {
-            color: #007bff;
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .principle {
+            background-color: #e2e8f0;
+            border-left: 5px solid #3182ce;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+        .principle h2 {
+            color: #2d3748;
+            margin-top: 0;
+        }
+        .principle p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .lists-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        .list-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        h2 {
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
         ul {
             list-style-type: none;
             padding: 0;
         }
         li {
-            background-color: #fff;
-            margin: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            background-color: #f7fafc;
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        li:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: #3182ce;
+        }
+        .sorted li:before {
+            background-color: #38a169;
+        }
+        @media (max-width: 768px) {
+            .lists-container {
+                flex-direction: column;
+            }
+            h1 {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>城市排序列表</h1>
-    <h2>原始城市列表</h2>
-    <ul>
-        <li>Taipei</li>
-        <li>Kaohsiung</li>
-        <li>Taichung</li>
-        <li>Tainan</li>
-        <li>Hsinchu</li>
-    </ul>
-    <h2>排序後的城市列表 (氣泡排序)</h2>
-    <ul>
-        <li>Hsinchu</li>
-        <li>Kaohsiung</li>
-        <li>Taichung</li>
-        <li>Tainan</li>
-        <li>Taipei</li>
-    </ul>
+    <div class="container">
+        <h1>城市排序列表 - 氣泡排序法</h1>
+
+        <div class="principle">
+            <h2>氣泡排序法原理</h2>
+            <p>氣泡排序法（Bubble Sort）是一種簡單的排序演算法。它重複地走訪要排序的數列，一次比較兩個元素，如果他們的順序錯誤就把他們交換過來。</p>
+            <p>走訪數列的工作是重複地進行直到沒有再需要交換，也就是說該數列已經排序完成。這個演算法的名字由來是因為越小的元素會經由交換慢慢「浮」到數列的頂端。</p>
+            <p>時間複雜度：最壞情況和平均情況為 O(n²)，最佳情況為 O(n)。</p>
+        </div>
+
+        <div class="lists-container">
+            <div class="list-section">
+                <h2>原始城市列表</h2>
+                <ul>
+                    <li>Taipei</li>
+                    <li>Kaohsiung</li>
+                    <li>Taichung</li>
+                    <li>Tainan</li>
+                    <li>Hsinchu</li>
+                </ul>
+            </div>
+            <div class="list-section">
+                <h2>排序後的城市列表</h2>
+                <ul class="sorted">
+                    <li>Hsinchu</li>
+                    <li>Kaohsiung</li>
+                    <li>Taichung</li>
+                    <li>Tainan</li>
+                    <li>Taipei</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
