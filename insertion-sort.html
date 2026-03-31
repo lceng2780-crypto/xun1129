@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>選擇排序法</title>
+    <title>插入排序法</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -179,16 +179,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔄 選擇排序法完整教學</h1>
+        <h1>🔄 插入排序法完整教學</h1>
         <p class="subtitle">程式碼、原理與運作演示</p>
         <!-- 基本概念 -->
         <section>
             <h2>📌 基本概念</h2>
             <p class="principle-text">
-                <strong>選擇排序法（Selection Sort）</strong>是一種簡單直觀的排序演算法。其基本思想是：每一輪從尚未排序的元素中選出最小值，放到已排序序列的末端。重複此步驟直到所有元素排序完成。
+                <strong>插入排序法（Insertion Sort）</strong>是一種簡單的排序演算法。其基本思想是：將未排序的元素逐一插入到已排序序列的正確位置。類似於整理撲克牌，將每一張牌插入到已排序牌中的適當位置。
             </p>
             <p class="principle-text">
-                這個演算法通過不斷選擇最小元素來建構排序序列，適合用於理解排序的基本概念，但在實際應用中性能不如其他排序演算法。
+                這個演算法適合用於理解排序的基本概念，尤其在資料已大致排序時效能良好，但在實際應用中對於大型資料集仍有改進空間。
             </p>
         </section>
 
@@ -199,29 +199,30 @@
             <h3 style="color: #2d3748; margin-top: 20px;">演算法步驟：</h3>
             <div class="step">
                 <span class="step-number">1</span>
-                <strong>外層迴圈：</strong>走訪整個數列 n-1 次（n 是數列長度）
+                <strong>初始化：</strong>將第一個元素視為已排序序列
             </div>
             <div class="step">
                 <span class="step-number">2</span>
-                <strong>尋找最小值：</strong>在未排序區間中找到最小元素的索引
+                <strong>取出元素：</strong>從第二個元素開始，取出下一個未排序元素
             </div>
             <div class="step">
                 <span class="step-number">3</span>
-                <strong>交換元素：</strong>將最小元素與未排序區間的第一個元素交換
+                <strong>比較插入：</strong>與已排序序列從右向左比較，找到正確位置
             </div>
             <div class="step">
                 <span class="step-number">4</span>
-                <strong>縮小範圍：</strong>已排序區間擴大，未排序區間縮小
+                <strong>移動元素：</strong>將大於取出元素的元素向右移動，為新元素騰出空間
             </div>
 
             <h3 style="color: #2d3748; margin-top: 20px;">虛擬程式碼：</h3>
             <div class="code-block">
-for i = 0 to n-2:
-    minIndex = i
-    for j = i+1 to n-1:
-        if arr[j] < arr[minIndex]:
-            minIndex = j
-    swap arr[i] and arr[minIndex]
+for i = 1 to n-1:
+    key = arr[i]
+    j = i - 1
+    while j >= 0 and arr[j] > key:
+        arr[j+1] = arr[j]
+        j = j - 1
+    arr[j+1] = key
             </div>
         </section>
 
@@ -233,35 +234,32 @@ for i = 0 to n-2:
                 <strong>初始陣列：</strong> [5, 2, 8, 1, 9]
             </div>
 
-            <h3 style="color: #2d3748;">第 1 輪：</h3>
+            <h3 style="color: #2d3748;">第 1 輪：插入 2</h3>
             <div class="visualization-step">
-                未排序區間: [5, 2, 8, 1, 9]<br>
-                尋找最小值: 1 (索引 3)<br>
-                <span class="swap-arrow">交換</span> 5 和 1 → [1, 2, 8, 5, 9]<br>
-                <span class="highlight">1 已在正確位置</span>
+                取出 2，與已排序序列 [5] 比較<br>
+                2 < 5，向右移動 5，插入 2 → [2, 5, 8, 1, 9]<br>
+                <span class="highlight">2 已插入正確位置</span>
             </div>
 
-            <h3 style="color: #2d3748;">第 2 輪：</h3>
+            <h3 style="color: #2d3748;">第 2 輪：插入 8</h3>
             <div class="visualization-step">
-                未排序區間: [2, 8, 5, 9]<br>
-                尋找最小值: 2 (索引 1)<br>
-                2 已在第一位，無需交換 → [1, <span class="highlight">2, 8, 5, 9</span>]<br>
-                <span class="highlight">2 已在正確位置</span>
+                取出 8，與已排序序列 [2, 5] 比較<br>
+                8 > 5，無需移動，8 已在正確位置 → [2, 5, <span class="highlight">8, 1, 9</span>]<br>
+                <span class="highlight">8 已插入正確位置</span>
             </div>
 
-            <h3 style="color: #2d3748;">第 3 輪：</h3>
+            <h3 style="color: #2d3748;">第 3 輪：插入 1</h3>
             <div class="visualization-step">
-                未排序區間: [8, 5, 9]<br>
-                尋找最小值: 5 (索引 3)<br>
-                <span class="swap-arrow">交換</span> 8 和 5 → [1, 2, 5, 8, 9]<br>
-                <span class="highlight">5 已在正確位置</span>
+                取出 1，與已排序序列 [2, 5, 8] 比較<br>
+                1 < 8，向右移動 8；1 < 5，向右移動 5；1 < 2，向右移動 2<br>
+                插入 1 → [1, 2, 5, 8, 9]<br>
+                <span class="highlight">1 已插入正確位置</span>
             </div>
 
-            <h3 style="color: #2d3748;">第 4 輪：</h3>
+            <h3 style="color: #2d3748;">第 4 輪：插入 9</h3>
             <div class="visualization-step">
-                未排序區間: [8, 9]<br>
-                尋找最小值: 8 (索引 3)<br>
-                8 已在第一位，無需交換 → [1, 2, 5, <span class="highlight">8, 9</span>]<br>
+                取出 9，與已排序序列 [1, 2, 5, 8] 比較<br>
+                9 > 8，無需移動，9 已在正確位置 → [1, 2, 5, 8, <span class="highlight">9</span>]<br>
                 <span class="highlight">數列已排序完成</span>
             </div>
         </section>
@@ -273,28 +271,23 @@ for i = 0 to n-2:
             <div class="c-code">
 #include &lt;stdio.h&gt;
 
-// 選擇排序函數
-void selectionSort(int arr[], int n) {
-    int i, j, minIndex, temp;
+// 插入排序函數
+void insertionSort(int arr[], int n) {
+    int i, j, key;
     
-    // 外層迴圈：走訪 n-1 次
-    for (i = 0; i &lt; n-1; i++) {
-        // 假設當前位置是最小值
-        minIndex = i;
+    // 從第二個元素開始
+    for (i = 1; i &lt; n; i++) {
+        key = arr[i];  // 取出當前元素
+        j = i - 1;
         
-        // 內層迴圈：尋找未排序區間中的最小值
-        for (j = i+1; j &lt; n; j++) {
-            if (arr[j] &lt; arr[minIndex]) {
-                minIndex = j;
-            }
+        // 將大於 key 的元素向右移動
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
         }
         
-        // 如果找到更小的值，進行交換
-        if (minIndex != i) {
-            temp = arr[i];
-            arr[i] = arr[minIndex];
-            arr[minIndex] = temp;
-        }
+        // 插入 key 到正確位置
+        arr[j + 1] = key;
     }
 }
 
@@ -311,8 +304,8 @@ int main() {
     }
     printf("\n\n");
 
-    // 執行選擇排序
-    selectionSort(numbers, n);
+    // 執行插入排序
+    insertionSort(numbers, n);
 
     // 顯示排序後的陣列
     printf("排序後的數列: ");
@@ -339,8 +332,8 @@ int main() {
             <div class="complexity-box">
                 <div class="complexity-item">
                     <div class="complexity-label">最佳情況</div>
-                    <div class="complexity-value">O(n²)</div>
-                    <p style="font-size: 0.85em; color: #718096; margin: 5px 0 0 0;">總是 O(n²)</p>
+                    <div class="complexity-value">O(n)</div>
+                    <p style="font-size: 0.85em; color: #718096; margin: 5px 0 0 0;">陣列已排序</p>
                 </div>
                 <div class="complexity-item">
                     <div class="complexity-label">平均情況</div>
@@ -361,15 +354,15 @@ int main() {
                 </tr>
                 <tr>
                     <td><strong>時間複雜度</strong></td>
-                    <td>O(n²) - 無論資料狀況如何，都需要 n-1 次外層迴圈，每次內層迴圈最多執行 n-i-1 次，總共約 n×n/2 = n²/2 ≈ O(n²)</td>
+                    <td>O(n²) - 最壞和平均情況下，外層迴圈 n-1 次，內層 while 迴圈平均 n/2 次，總共約 n×n/2 = n²/2 ≈ O(n²)；最佳情況 O(n)</td>
                 </tr>
                 <tr>
                     <td><strong>空間複雜度</strong></td>
-                    <td>O(1) - 只使用常數個額外變數（如 temp, i, j, minIndex），不需要額外的陣列</td>
+                    <td>O(1) - 只使用常數個額外變數（如 key, i, j），不需要額外的陣列</td>
                 </tr>
                 <tr>
                     <td><strong>穩定性</strong></td>
-                    <td>✗ 不穩定排序 - 相同元素的相對順序可能會改變</td>
+                    <td>✓ 穩定排序 - 相同元素的相對順序不會改變</td>
                 </tr>
                 <tr>
                     <td><strong>排序方式</strong></td>
@@ -386,27 +379,27 @@ int main() {
             <ul class="advantages">
                 <li><strong>簡單易懂：</strong>演算法邏輯直觀，新手容易理解</li>
                 <li><strong>原地排序：</strong>只需要常數級別的額外空間 O(1)</li>
-                <li><strong>交換次數少：</strong>最多只進行 n-1 次交換</li>
-                <li><strong>易於實現：</strong>程式碼簡潔，容易除錯</li>
-                <li><strong>適合小資料集：</strong>當資料量很小時效能尚可</li>
+                <li><strong>穩定排序：</strong>相同值的元素相對順序不變</li>
+                <li><strong>自適應：</strong>已排序或近似排序的陣列時間複雜度為 O(n)</li>
+                <li><strong>線上排序：</strong>可以處理串流資料，隨時插入新元素</li>
             </ul>
 
             <h3 style="color: #f56565;">✗ 缺點：</h3>
             <ul class="disadvantages">
                 <li><strong>效率低：</strong>平均時間複雜度為 O(n²)，不適合大型資料集</li>
-                <li><strong>比較次數多：</strong>即使資料已大致排序，仍需進行大量比較</li>
-                <li><strong>不穩定排序：</strong>相同值的元素相對順序可能改變</li>
+                <li><strong>比較次數多：</strong>在最壞情況下需要大量比較操作</li>
+                <li><strong>移動次數多：</strong>會進行大量數據移動操作</li>
                 <li><strong>不適合實務應用：</strong>當數據量大時，效能顯著下降</li>
             </ul>
         </section>
         <!-- 互動可視化 -->
         <section>
             <h2>🎮 互動可視化演示</h2>
-            <p>請點擊「下一步」按鈕逐步觀察選擇排序的每一輪過程。不同顏色表示不同的狀態：</p>
+            <p>請點擊「下一步」按鈕逐步觀察插入排序的每一輪過程。不同顏色表示不同的狀態：</p>
             <ul>
                 <li><span style="color:#22543d; font-weight:bold;">綠色</span>：已排序區間</li>
-                <li><span style="color:#97266d; font-weight:bold;">粉色</span>：當前找到的最小值</li>
-                <li><span style="color:#2a4365; font-weight:bold;">藍色</span>：正在比較的元素</li>
+                <li><span style="color:#97266d; font-weight:bold;">粉色</span>：當前正在插入的元素</li>
+                <li><span style="color:#2a4365; font-weight:bold;">藍色</span>：正在比較的位置</li>
             </ul>
             <div id="visualization" class="visual-array" style="margin:20px 0; padding:20px; background:#f7fafc; border-radius:8px;"></div>
             <div style="text-align:center; margin:15px 0;">
@@ -416,17 +409,17 @@ int main() {
             </div>
             <div id="step-info" style="text-align:center; margin:10px 0; font-weight:bold; color:#2d3748;"></div>
             <script>
-            // 選擇排序可視化
+            // 插入排序可視化
             let arr = [5, 2, 8, 4, 1];
-            let i = 0, j = 1, minIndex = 0, finished = false, autoPlayInterval = null;
+            let i = 1, j, key, inserting = false, finished = false, autoPlayInterval = null;
             function render() {
                 let html = arr.map((num, idx) => {
                     let style = 'border: 2px solid #3182ce; margin: 0 8px; padding: 10px; border-radius: 8px; font-size: 1.4em; font-weight: bold; transition: all 0.3s ease;';
                     if (idx < i) {
                         style += 'background:#c6f6d5; color:#22543d; border-color:#48bb78;'; // 已排序
-                    } else if (idx === minIndex && !finished) {
-                        style += 'background:#fbb6ce; color:#97266d; border-color:#e53e3e; transform: scale(1.1);'; // 當前最小
-                    } else if (idx === j && !finished) {
+                    } else if (inserting && idx === j+1) {
+                        style += 'background:#fbb6ce; color:#97266d; border-color:#e53e3e; transform: scale(1.1);'; // 當前鍵位置
+                    } else if (inserting && idx === j && j >= 0) {
                         style += 'background:#bee3f8; color:#2a4365; border-color:#3182ce;'; // 當前比較
                     } else {
                         style += 'background:#ffffff; color:#2d3748;';
@@ -439,37 +432,38 @@ int main() {
                 let stepInfo = '';
                 if (finished) {
                     stepInfo = '排序完成！';
-                } else if (j >= arr.length) {
-                    stepInfo = `第 ${i+1} 輪：找到最小值 ${arr[minIndex]}，準備交換`;
+                } else if (inserting) {
+                    stepInfo = `第 ${i} 輪：插入 ${key} 中，正在比較位置 ${j}`;
                 } else {
-                    stepInfo = `第 ${i+1} 輪：比較中... 當前最小值：${arr[minIndex]}`;
+                    stepInfo = `第 ${i} 輪：準備插入 ${arr[i]}`;
                 }
                 document.getElementById('step-info').textContent = stepInfo;
             }
             function nextStep() {
                 if (finished) return;
-                if (i >= arr.length - 1) {
+                if (i >= arr.length) {
                     finished = true;
                     render();
                     return;
                 }
-                if (j >= arr.length) {
-                    // 交換
-                    let tmp = arr[i];
-                    arr[i] = arr[minIndex];
-                    arr[minIndex] = tmp;
-                    i++;
-                    minIndex = i;
-                    j = i + 1;
+                if (!inserting) {
+                    key = arr[i];
+                    j = i - 1;
+                    inserting = true;
+                }
+                if (j >= 0 && arr[j] > key) {
+                    arr[j+1] = arr[j];
+                    j--;
                 } else {
-                    if (arr[j] < arr[minIndex]) minIndex = j;
-                    j++;
+                    arr[j+1] = key;
+                    i++;
+                    inserting = false;
                 }
                 render();
             }
             function resetSort() {
                 arr = [5, 2, 8, 4, 1];
-                i = 0; j = 1; minIndex = 0; finished = false;
+                i = 1; inserting = false; finished = false;
                 if (autoPlayInterval) {
                     clearInterval(autoPlayInterval);
                     autoPlayInterval = null;
@@ -500,9 +494,9 @@ int main() {
             <ul>
                 <li><strong>教育用途：</strong>學習排序演算法的基礎概念</li>
                 <li><strong>小規模資料：</strong>當資料量很小（< 100 元素）時</li>
-                <li><strong>記憶體受限：</strong>當記憶體空間非常有限時</li>
-                <li><strong>演算法理解：</strong>理解選擇和交換的概念</li>
-                <li><strong>簡單實現：</strong>當簡單易懂比效率更重要時</li>
+                <li><strong>近似排序：</strong>當資料已大致排序時</li>
+                <li><strong>線上排序：</strong>需要動態插入新元素的場景</li>
+                <li><strong>穩定性重要：</strong>當需要保持相同元素的相對順序時</li>
             </ul>
         </section>
 
@@ -566,10 +560,10 @@ int main() {
         <section style="background-color: #edf2f7; border-left-color: #48bb78;">
             <h2 style="color: #22543d;">📝 總結</h2>
             <p class="principle-text">
-                選擇排序法是學習排序演算法時的重要基礎，它清楚地演示了選擇和交換的基本概念。雖然在實務應用中因為效率問題而較少使用，但它對於理解演算法設計和複雜度分析仍然非常有價值。
+                插入排序法是學習排序演算法時的重要基礎，它清楚地演示了插入和比較的基本概念。雖然在實務應用中因為效率問題而較少使用，但它對於理解演算法設計和複雜度分析仍然非常有價值。
             </p>
             <p class="principle-text">
-                當您需要排序小規模資料或進行教學演示時，選擇排序法是一個簡單且實用的選擇。但對於生產環境或大型資料集，應該選擇效率更高的演算法如快速排序或歸併排序。
+                當您需要排序小規模或近似排序的資料，或是需要穩定排序時，插入排序法是一個簡單且實用的選擇。但對於生產環境或大型資料集，應該選擇效率更高的演算法如快速排序或歸併排序。
             </p>
         </section>
     </div>
