@@ -1,5 +1,5 @@
 學號：11428229  姓名：曾立薰
-模擬頁面網址：file:///C:/%E4%BD%9C%E6%A5%AD/xun1129/sort-menu.html
+模擬頁面網址： https://lceng2780-crypto.github.io/xun1129/sort-menu.html
 # 排序法綜合報告
 
 ## 前言
