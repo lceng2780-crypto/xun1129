@@ -11,55 +11,39 @@
             color: #333;
             margin: 0;
             padding: 20px;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-        }
-        h1 {
-            text-align: center;
-            color: #2d3748;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #718096;
-            margin-bottom: 40px;
-            font-size: 1.1em;
-        }
-        section {
-            margin-bottom: 40px;
-            padding: 25px;
-            background-color: #f7fafc;
-            border-radius: 8px;
-            border-left: 5px solid #3182ce;
-        }
-        h2 {
-            color: #2d3748;
-            border-bottom: 2px solid #3182ce;
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
-        .principle-text {
-            line-height: 1.8;
-            font-size: 1.05em;
-            margin: 15px 0;
-        }
-        .code-block {
-            background-color: #1a202c;
-            color: #68d391;
+
+            <!-- 操作原理與動畫演示 -->
+            <section>
+                <h2>⚙️ 操作原理與動畫演示</h2>
+                <div class="principle-text">
+                    選擇排序法（Selection Sort）是一種簡單直觀的排序演算法，基本流程：
+                    <ul>
+                        <li>每輪從未排序區間選出最小值</li>
+                        <li>將最小值與未排序區第一個元素交換</li>
+                        <li>已排序區擴大，未排序區縮小</li>
+                        <li>重複直到全部排序完成</li>
+                    </ul>
+                </div>
+                <div id="visualization-area" style="margin:30px 0;"></div>
+                <div style="text-align:center;margin-bottom:20px;">
+                    <input id="input-array" type="text" value="5,2,8,1,9" style="width:220px;padding:8px;border-radius:6px;border:1px solid #ccc;font-size:1em;">
+                    <button onclick="startSelectionSort()" style="padding:10px 22px;background:#3182ce;color:#fff;border:none;border-radius:6px;font-size:1em;cursor:pointer;margin-left:10px;">開始排序動畫</button>
+                </div>
+                <div style="text-align:center;color:#888;font-size:0.95em;">（可自訂數列，逗號分隔）</div>
+            </section>
+
+            <!-- 演算法偽代碼 -->
+            <section>
+                <h2>📝 演算法偽代碼</h2>
+                <div class="code-block" style="margin-bottom:0;">
             padding: 20px;
             border-radius: 8px;
             overflow-x: auto;
             font-family: 'Courier New', monospace;
             font-size: 0.95em;
             line-height: 1.5;
+                </div>
+            </section>
             margin: 15px 0;
             border: 1px solid #2d3748;
         }
@@ -332,50 +316,28 @@ int main() {
             </div>
         </section>
 
-        <!-- 時間複雜度分析 -->
-        <section>
-            <h2>📈 效能分析</h2>
-            
-            <div class="complexity-box">
-                <div class="complexity-item">
-                    <div class="complexity-label">最佳情況</div>
-                    <div class="complexity-value">O(n²)</div>
-                    <p style="font-size: 0.85em; color: #718096; margin: 5px 0 0 0;">總是 O(n²)</p>
-                </div>
-                <div class="complexity-item">
-                    <div class="complexity-label">平均情況</div>
-                    <div class="complexity-value">O(n²)</div>
-                    <p style="font-size: 0.85em; color: #718096; margin: 5px 0 0 0;">隨機排列</p>
-                </div>
-                <div class="complexity-item">
-                    <div class="complexity-label">最壞情況</div>
-                    <div class="complexity-value">O(n²)</div>
-                    <p style="font-size: 0.85em; color: #718096; margin: 5px 0 0 0;">逆序排列</p>
-                </div>
-            </div>
 
+        <!-- 時間與空間複雜度 -->
+        <section>
+            <h2>⏳ 時間與空間複雜度</h2>
             <table class="comparison-table">
-                <tr>
-                    <th>複雜度分類</th>
-                    <th>說明</th>
-                </tr>
-                <tr>
-                    <td><strong>時間複雜度</strong></td>
-                    <td>O(n²) - 無論資料狀況如何，都需要 n-1 次外層迴圈，每次內層迴圈最多執行 n-i-1 次，總共約 n×n/2 = n²/2 ≈ O(n²)</td>
-                </tr>
-                <tr>
-                    <td><strong>空間複雜度</strong></td>
-                    <td>O(1) - 只使用常數個額外變數（如 temp, i, j, minIndex），不需要額外的陣列</td>
-                </tr>
-                <tr>
-                    <td><strong>穩定性</strong></td>
-                    <td>✗ 不穩定排序 - 相同元素的相對順序可能會改變</td>
-                </tr>
-                <tr>
-                    <td><strong>排序方式</strong></td>
-                    <td>○ 原地排序 - 不需要額外的記憶體空間</td>
-                </tr>
+                <tr><th>最佳/平均/最壞時間複雜度</th><td>O(n²)</td></tr>
+                <tr><th>空間複雜度</th><td>O(1)</td></tr>
+                <tr><th>排序穩定性</th><td>不穩定</td></tr>
             </table>
+            <div style="margin-top:18px;">
+                <strong>優點：</strong>
+                <ul class="advantages">
+                    <li>簡單易懂，適合教學</li>
+                    <li>原地排序，空間需求低</li>
+                    <li>交換次數少，最多 n-1 次</li>
+                </ul>
+                <strong>缺點：</strong>
+                <ul class="disadvantages">
+                    <li>效率低，O(n²)</li>
+                    <li>不穩定排序</li>
+                </ul>
+            </div>
         </section>
 
         <!-- 優缺點 -->
@@ -572,6 +534,87 @@ int main() {
                 當您需要排序小規模資料或進行教學演示時，選擇排序法是一個簡單且實用的選擇。但對於生產環境或大型資料集，應該選擇效率更高的演算法如快速排序或歸併排序。
             </p>
         </section>
+        <script>
+// ===== 視覺化互動區 =====
+const visArea = document.getElementById('visualization-area');
+let visArray = [];
+let visSteps = [];
+let visCurrent = 0;
+let visTimer = null;
+
+function renderArray(arr, highlight = {}) {
+    visArea.innerHTML = arr.map((v, i) => {
+        let style = 'display:inline-block;width:38px;height:38px;line-height:38px;margin:0 6px 10px 0;font-size:1.2em;border-radius:8px;background:#e2e8f0;border:2px solid #cbd5e1;text-align:center;transition:all .3s;';
+        if (highlight[i] === 'min') style += 'background:#ffd700;border-color:#f6ad55;font-weight:bold;';
+        else if (highlight[i] === 'focus') style += 'background:#90cdf4;border-color:#3182ce;';
+        else if (highlight[i] === 'sorted') style += 'background:#68d391;border-color:#38a169;color:#fff;';
+        return `<span style="${style}">${v}</span>`;
+    }).join('');
+}
+
+function recordStep(arr, highlight) {
+    visSteps.push({arr: arr.slice(), highlight: {...highlight}});
+}
+
+function selectionSortVis(arr) {
+    let n = arr.length;
+    for (let i = 0; i < n-1; i++) {
+        let minIdx = i;
+        let highlight = {};
+        highlight[i] = 'focus';
+        recordStep(arr, highlight);
+        for (let j = i+1; j < n; j++) {
+            highlight = {};
+            highlight[minIdx] = 'min';
+            highlight[j] = 'focus';
+            recordStep(arr, highlight);
+            if (arr[j] < arr[minIdx]) {
+                minIdx = j;
+                highlight = {};
+                highlight[minIdx] = 'min';
+                recordStep(arr, highlight);
+            }
+        }
+        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+        highlight = {};
+        highlight[i] = 'sorted';
+        recordStep(arr, highlight);
+    }
+    let highlight = {};
+    for (let k = 0; k < n; k++) highlight[k] = 'sorted';
+    recordStep(arr, highlight);
+}
+
+function startSelectionSort() {
+    let input = document.getElementById('input-array').value;
+    let arr = input.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+    if (arr.length < 2) {
+        visArea.innerHTML = '<span style="color:#e53e3e">請輸入至少兩個數字</span>';
+        return;
+    }
+    visArray = arr.slice();
+    visSteps = [];
+    visCurrent = 0;
+    selectionSortVis(arr);
+    playSteps();
+}
+
+function playSteps() {
+    if (visSteps.length === 0) return;
+    visCurrent = 0;
+    renderArray(visSteps[0].arr, visSteps[0].highlight);
+    if (visTimer) clearInterval(visTimer);
+    visTimer = setInterval(() => {
+        visCurrent++;
+        if (visCurrent >= visSteps.length) {
+            clearInterval(visTimer);
+            renderArray(visSteps[visSteps.length-1].arr, visSteps[visSteps.length-1].highlight);
+            return;
+        }
+        renderArray(visSteps[visCurrent].arr, visSteps[visCurrent].highlight);
+    }, 900);
+}
+        </script>
     </div>
         <div style="text-align:center; margin-top:30px;">
             <a href="sort-menu.html" style="color:#3182ce; text-decoration:underline; font-size:1.1em;">返回選擇頁面</a>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合併排序法</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+
+        <!-- 操作原理與動畫演示 -->
+        <section>
+            <h2>⚙️ 操作原理與動畫演示</h2>
+            <div class="principle-text">
+                合併排序法（Merge Sort）是一種高效的分治法排序演算法，基本流程：
+                <ul>
+                    <li>將序列不斷對半分割，直到每個子序列只剩一個元素</li>
+                    <li>將這些子序列兩兩合併成有序序列</li>
+                    <li>最終合併成完整的排序結果</li>
+                </ul>
+            </div>
+            <div id="visualization-area" style="margin:30px 0;"></div>
+            <div style="text-align:center;margin-bottom:20px;">
+                <input id="input-array" type="text" value="5,2,8,1,9" style="width:220px;padding:8px;border-radius:6px;border:1px solid #ccc;font-size:1em;">
+                <button onclick="startMergeSort()" style="padding:10px 22px;background:#3182ce;color:#fff;border:none;border-radius:6px;font-size:1em;cursor:pointer;margin-left:10px;">開始排序動畫</button>
+            </div>
+            <div style="text-align:center;color:#888;font-size:0.95em;">（可自訂數列，逗號分隔）</div>
+        </section>
+
+        <!-- 演算法偽代碼 -->
+        <section>
+            <h2>📝 演算法偽代碼</h2>
+            <div class="code-block" style="margin-bottom:0;">
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin: 15px 0;
+            border: 1px solid #2d3748;
+        }
+        .step {
+            background-color: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .step-number {
+            display: inline-block;
+            </div>
+        </section>
+            background-color: #48bb78;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .example {
+            background-color: #edf2f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px dashed #3182ce;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: white;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+        }
+        .comparison-table th {
+            background-color: #edf2f7;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .complexity-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .complexity-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-top: 3px solid #3182ce;
+            text-align: center;
+        }
+        .complexity-label {
+            font-weight: bold;
+            color: #4a5568;
+            font-size: 0.9em;
+        }
+        .complexity-value {
+            color: #3182ce;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .visualization-step {
+            background-color: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        .highlight {
+            background-color: #ffd700;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .swap-arrow {
+            color: #f56565;
+            font-weight: bold;
+        }
+        .advantages, .disadvantages {
+            margin: 15px 0;
+        }
+        .advantages li, .disadvantages li {
+            margin: 8px 0;
+        }
+        @media (max-width: 768px) {
+            .complexity-box {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔀 合併排序法完整教學</h1>
+        <p class="subtitle">程式碼、原理與運作演示</p>
+        <a href="sort-menu.html" style="display:inline-block;margin-bottom:20px;color:#3182ce;text-decoration:underline;font-size:1.1em;">← 回到排序法選單</a>
+        <!-- 基本概念 -->
+        <section>
+            <h2>📌 基本概念</h2>
+            <p class="principle-text">
+                <strong>合併排序法（Merge Sort）</strong>是一種有效率的分治法排序演算法。其基本思想是：將序列不斷對半分割，直到每個子序列只剩一個元素，再將這些子序列兩兩合併成有序序列，最終合併成完整的排序結果。
+            </p>
+            <p class="principle-text">
+                合併排序法的時間複雜度為 O(n log n)，無論最佳、最壞或平均情況皆如此，且屬於穩定排序。缺點是需要額外的記憶體空間。
+            </p>
+        </section>
+
+        <!-- 運作原理 -->
+        <section>
+            <h2>⚙️ 詳細運作原理</h2>
+            <h3 style="color: #2d3748; margin-top: 20px;">演算法步驟：</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>分割：</strong> 將序列從中間分成兩半。
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>遞迴排序：</strong> 對左右兩半分別遞迴進行合併排序。
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>合併：</strong> 將兩個已排序的子序列合併成一個有序序列。
+            </div>
+            <h3 style="color: #2d3748; margin-top: 20px;">虛擬程式碼：</h3>
+            <div class="code-block">
+function mergeSort(arr):
+    if len(arr) &lt;= 1:
+        return arr
+    mid = len(arr) // 2
+    left = mergeSort(arr[:mid])
+    right = mergeSort(arr[mid:])
+    return merge(left, right)
+
+function merge(left, right):
+    result = []
+    while left and right:
+        if left[0] &lt;= right[0]:
+            result.append(left.pop(0))
+        else:
+            result.append(right.pop(0))
+    result += left or right
+    return result
+            </div>
+        </section>
+
+        <!-- 具體例子 -->
+        <section>
+            <h2>📊 具體例子 - 排序 [5, 2, 8, 1, 9]</h2>
+            <div class="visualization-step">
+                <strong>初始陣列：</strong> [5, 2, 8, 1, 9]
+            </div>
+            <div class="visualization-step">
+                分割為 [5, 2] 和 [8, 1, 9]
+            </div>
+            <div class="visualization-step">
+                [5, 2] → 分割為 [5]、[2] → 合併為 [2, 5]
+            </div>
+            <div class="visualization-step">
+                [8, 1, 9] → 分割為 [8]、[1, 9] → [1, 9] 分割為 [1]、[9] → 合併為 [1, 9] → [8] 與 [1, 9] 合併為 [1, 8, 9]
+            </div>
+            <div class="visualization-step">
+                最後 [2, 5] 與 [1, 8, 9] 合併為 <span class="highlight">[1, 2, 5, 8, 9]</span>
+            </div>
+        </section>
+
+        <!-- C語言程式碼 -->
+        <section>
+            <h2>💻 C語言完整程式碼</h2>
+            <div class="c-code">
+#include &lt;stdio.h&gt;
+
+// 合併兩個子陣列
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    int L[n1], R[n2];
+    for (int i = 0; i &lt; n1; i++)
+        L[i] = arr[l + i];
+    for (int j = 0; j &lt; n2; j++)
+        R[j] = arr[m + 1 + j];
+    int i = 0, j = 0, k = l;
+    while (i &lt; n1 &amp;&amp; j &lt; n2) {
+        if (L[i] &lt;= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+    while (i &lt; n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+    while (j &lt; n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+// 合併排序主函數
+void mergeSort(int arr[], int l, int r) {
+    if (l &lt; r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+int main() {
+    int numbers[] = {5, 2, 8, 1, 9};
+    int n = sizeof(numbers)/sizeof(numbers[0]);
+    printf("原始數列: ");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d ", numbers[i]);
+    }
+    printf("\n\n");
+    mergeSort(numbers, 0, n-1);
+    printf("排序後的數列: ");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d ", numbers[i]);
+    }
+    printf("\n");
+    return 0;
+}
+            </div>
+        </section>
+
+
+        <!-- 時間與空間複雜度 -->
+        <section>
+            <h2>⏳ 時間與空間複雜度</h2>
+            <table class="comparison-table">
+                <tr><th>最佳/平均/最壞時間複雜度</th><td>O(n log n)</td></tr>
+                <tr><th>空間複雜度</th><td>O(n)</td></tr>
+                <tr><th>排序穩定性</th><td>穩定</td></tr>
+            </table>
+            <div style="margin-top:18px;">
+                <strong>優點：</strong>
+                <ul class="advantages">
+                    <li>適合大量資料排序，效率高</li>
+                    <li>排序結果穩定</li>
+                    <li>時間複雜度穩定</li>
+                </ul>
+                <strong>缺點：</strong>
+                <ul class="disadvantages">
+                    <li>需要額外記憶體空間</li>
+                    <li>對小型資料集效率不如插入排序</li>
+                </ul>
+            </div>
+        </section>
+        <a href="sort-menu.html" style="display:inline-block;margin-top:20px;color:#3182ce;text-decoration:underline;font-size:1.1em;">← 回到排序法選單</a>
+        <script>
+// ===== 視覺化互動區 =====
+const visArea = document.getElementById('visualization-area');
+let visArray = [];
+let visSteps = [];
+let visCurrent = 0;
+let visTimer = null;
+
+function renderArray(arr, highlight = {}, mergeRange = null) {
+    visArea.innerHTML = arr.map((v, i) => {
+        let style = 'display:inline-block;width:38px;height:38px;line-height:38px;margin:0 6px 10px 0;font-size:1.2em;border-radius:8px;background:#e2e8f0;border:2px solid #cbd5e1;text-align:center;transition:all .3s;';
+        if (highlight[i] === 'merge') style += 'background:#ffd700;border-color:#f6ad55;font-weight:bold;';
+        else if (highlight[i] === 'focus') style += 'background:#90cdf4;border-color:#3182ce;';
+        else if (highlight[i] === 'sorted') style += 'background:#68d391;border-color:#38a169;color:#fff;';
+        return `<span style="${style}">${v}</span>`;
+    }).join('');
+}
+
+function recordStep(arr, highlight, mergeRange) {
+    visSteps.push({arr: arr.slice(), highlight: {...highlight}, mergeRange});
+}
+
+function mergeSortVis(arr, l, r) {
+    if (l >= r) return;
+    let m = Math.floor((l + r) / 2);
+    mergeSortVis(arr, l, m);
+    mergeSortVis(arr, m + 1, r);
+    let left = arr.slice(l, m + 1);
+    let right = arr.slice(m + 1, r + 1);
+    let i = 0, j = 0, k = l;
+    let highlight = {};
+    for (let idx = l; idx <= r; idx++) highlight[idx] = 'merge';
+    recordStep(arr, highlight, [l, r]);
+    while (i < left.length && j < right.length) {
+        highlight = {};
+        highlight[k] = 'focus';
+        recordStep(arr, highlight, [l, r]);
+        if (left[i] <= right[j]) {
+            arr[k] = left[i];
+            i++;
+        } else {
+            arr[k] = right[j];
+            j++;
+        }
+        k++;
+        recordStep(arr, highlight, [l, r]);
+    }
+    while (i < left.length) {
+        arr[k] = left[i];
+        highlight = {};
+        highlight[k] = 'focus';
+        recordStep(arr, highlight, [l, r]);
+        i++; k++;
+    }
+    while (j < right.length) {
+        arr[k] = right[j];
+        highlight = {};
+        highlight[k] = 'focus';
+        recordStep(arr, highlight, [l, r]);
+        j++; k++;
+    }
+    highlight = {};
+    for (let idx = l; idx <= r; idx++) highlight[idx] = 'sorted';
+    recordStep(arr, highlight, [l, r]);
+}
+
+function startMergeSort() {
+    let input = document.getElementById('input-array').value;
+    let arr = input.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+    if (arr.length < 2) {
+        visArea.innerHTML = '<span style="color:#e53e3e">請輸入至少兩個數字</span>';
+        return;
+    }
+    visArray = arr.slice();
+    visSteps = [];
+    visCurrent = 0;
+    mergeSortVis(arr, 0, arr.length-1);
+    playSteps();
+}
+
+function playSteps() {
+    if (visSteps.length === 0) return;
+    visCurrent = 0;
+    renderArray(visSteps[0].arr, visSteps[0].highlight, visSteps[0].mergeRange);
+    if (visTimer) clearInterval(visTimer);
+    visTimer = setInterval(() => {
+        visCurrent++;
+        if (visCurrent >= visSteps.length) {
+            clearInterval(visTimer);
+            renderArray(visSteps[visSteps.length-1].arr, visSteps[visSteps.length-1].highlight, visSteps[visSteps.length-1].mergeRange);
+            return;
+        }
+        renderArray(visSteps[visCurrent].arr, visSteps[visCurrent].highlight, visSteps[visCurrent].mergeRange);
+    }, 900);
+}
+        </script>
+    </div>
+</body>
+</html>
