@@ -11,41 +11,6 @@
             color: #333;
             margin: 0;
             padding: 20px;
-
-            <!-- 操作原理與動畫演示 -->
-            <section>
-                <h2>⚙️ 操作原理與動畫演示</h2>
-                <div class="principle-text">
-                    選擇排序法（Selection Sort）是一種簡單直觀的排序演算法，基本流程：
-                    <ul>
-                        <li>每輪從未排序區間選出最小值</li>
-                        <li>將最小值與未排序區第一個元素交換</li>
-                        <li>已排序區擴大，未排序區縮小</li>
-                        <li>重複直到全部排序完成</li>
-                    </ul>
-                </div>
-                <div id="visualization-area" style="margin:30px 0;"></div>
-                <div style="text-align:center;margin-bottom:20px;">
-                    <input id="input-array" type="text" value="5,2,8,1,9" style="width:220px;padding:8px;border-radius:6px;border:1px solid #ccc;font-size:1em;">
-                    <button onclick="startSelectionSort()" style="padding:10px 22px;background:#3182ce;color:#fff;border:none;border-radius:6px;font-size:1em;cursor:pointer;margin-left:10px;">開始排序動畫</button>
-                </div>
-                <div style="text-align:center;color:#888;font-size:0.95em;">（可自訂數列，逗號分隔）</div>
-            </section>
-
-            <!-- 演算法偽代碼 -->
-            <section>
-                <h2>📝 演算法偽代碼</h2>
-                <div class="code-block" style="margin-bottom:0;">
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-            line-height: 1.5;
-                </div>
-            </section>
-            margin: 15px 0;
-            border: 1px solid #2d3748;
         }
         .c-code {
             background-color: #1a202c;
